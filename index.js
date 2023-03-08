@@ -3,6 +3,9 @@ const fs = require('fs');
 const http = require('http');
 const url = require('url');
 
+// 3rd Party Modules
+const slugify = require('slugify');
+
 // Own Modules
 const replaceTemplate = require(`${__dirname}/modules/replaceTemplate`);
 
@@ -29,6 +32,14 @@ const tempCard = fs.readFileSync(
  */
 const data = fs.readFileSync(`${__dirname}/dev-data/data.json`, 'utf-8');
 const dataObj = JSON.parse(data);
+
+// create slugs
+const slugs = dataObj.map((dataEl) =>
+   slugify(dataEl.productName, {
+      lower: true,
+   })
+);
+console.log(slugs);
 
 // Routing
 const server = http.createServer((req, res) => {
