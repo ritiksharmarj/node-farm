@@ -5,23 +5,30 @@ const url = require('url');
 ///////////////////////////////
 // SERVER
 
-const replaceTemplate = (dataEl, tempCard) => {
-   let output = tempCard.replace(/{%PRODUCTNAME%}/g, dataEl.productName);
-   output = output.replace(/{%IMAGE%}/g, dataEl.image);
-   output = output.replace(/{%FROM%}/g, dataEl.from);
-   output = output.replace(/{%NUTRIENTS%}/g, dataEl.nutrients);
-   output = output.replace(/{%QUANTITY%}/g, dataEl.quantity);
-   output = output.replace(/{%PRICE%}/g, dataEl.price);
-   output = output.replace(/{%ID%}/g, dataEl.id);
-   output = output.replace(/{%DESCRIPTION%}/g, dataEl.description);
-   output = output.replace(/{%DESCRIPTION%}/g, dataEl.description);
+/**
+ * Returns the template card as output
+ * @param {object} dataEl - Data coming from the data.json API
+ * @param {string} template - Template Card Component
+ * @returns {string} template card
+ */
+const replaceTemplate = (dataEl, template) => {
+   let output = template.replaceAll('{%PRODUCTNAME%}', dataEl.productName);
+   output = output.replaceAll('{%IMAGE%}', dataEl.image);
+   output = output.replaceAll('{%FROM%}', dataEl.from);
+   output = output.replaceAll('{%NUTRIENTS%}', dataEl.nutrients);
+   output = output.replaceAll('{%QUANTITY%}', dataEl.quantity);
+   output = output.replaceAll('{%PRICE%}', dataEl.price);
+   output = output.replaceAll('{%ID%}', dataEl.id);
+   output = output.replaceAll('{%DESCRIPTION%}', dataEl.description);
+   output = output.replaceAll('{%DESCRIPTION%}', dataEl.description);
 
    if (!dataEl.organic)
-      output = output.replace(/{%NOT_ORGANIC%}/g, 'not-organic');
+      output = output.replaceAll('{%NOT_ORGANIC%}', 'not-organic');
 
    return output;
 };
 
+// Selecting Templates
 const tempOverview = fs.readFileSync(
    `${__dirname}/templates/template-overview.html`,
    'utf-8'
@@ -35,16 +42,20 @@ const tempCard = fs.readFileSync(
    'utf-8'
 );
 
-// Blocking, synchronous, execute once
+/**
+ * Read data from the data.json API file
+ * Blocking, synchronous, execute once
+ */
 const data = fs.readFileSync(`${__dirname}/dev-data/data.json`, 'utf-8');
 const dataObj = JSON.parse(data);
 
+// Routing
 const server = http.createServer((req, res) => {
-   // Routing
-   const pathName = req.url;
+   // Parsing variables from URLs
+   const { query, pathname } = url.parse(req.url, true);
 
    // Overview page
-   if (pathName === '/' || pathName === '/overview') {
+   if (pathname === '/' || pathname === '/overview') {
       res.writeHead(200, { 'content-type': 'text/html' });
 
       const cardsHtml = dataObj
@@ -55,12 +66,14 @@ const server = http.createServer((req, res) => {
    }
 
    // Product page
-   else if (pathName === '/product') {
-      res.end('This is the PRODUCT');
+   else if (pathname === '/product') {
+      const product = dataObj[query.id];
+      const output = replaceTemplate(product, tempProduct);
+      res.end(output);
    }
 
    // API
-   else if (pathName === '/api') {
+   else if (pathname === '/api') {
       res.writeHead(200, { 'content-type': 'application/json' });
       res.end(data);
    }
