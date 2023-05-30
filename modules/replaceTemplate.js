@@ -1,22 +1,14 @@
-/**
- * Returns the template card as output
- * @param {object} dataEl - Product coming from the data.json API
- * @param {string} template - Template Card Component
- * @returns {string} template card
- */
-module.exports = (dataEl, template) => {
-   let output = template.replaceAll('{%PRODUCTNAME%}', dataEl.productName);
-   output = output.replaceAll('{%IMAGE%}', dataEl.image);
-   output = output.replaceAll('{%FROM%}', dataEl.from);
-   output = output.replaceAll('{%NUTRIENTS%}', dataEl.nutrients);
-   output = output.replaceAll('{%QUANTITY%}', dataEl.quantity);
-   output = output.replaceAll('{%PRICE%}', dataEl.price);
-   output = output.replaceAll('{%ID%}', dataEl.id);
-   output = output.replaceAll('{%DESCRIPTION%}', dataEl.description);
-   output = output.replaceAll('{%DESCRIPTION%}', dataEl.description);
+module.exports = (temp, product) => {
+  let output = temp.replace(/{%PRODUCTNAME%}/g, product.productName);
+  output = output.replace(/{%IMAGE%}/g, product.image);
+  output = output.replace(/{%PRICE%}/g, product.price);
+  output = output.replace(/{%FROM%}/g, product.from);
+  output = output.replace(/{%NUTRIENTS%}/g, product.nutrients);
+  output = output.replace(/{%QUANTITY%}/g, product.quantity);
+  output = output.replace(/{%DESCRIPTION%}/g, product.description);
+  output = output.replace(/{%ID%}/g, product.id);
 
-   if (!dataEl.organic)
-      output = output.replaceAll('{%NOT_ORGANIC%}', 'not-organic');
-
-   return output;
+  if (!product.organic)
+    output = output.replace(/{%NOT_ORGANIC%}/g, 'not-organic');
+  return output;
 };

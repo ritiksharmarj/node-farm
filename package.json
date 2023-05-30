@@ -1,25 +1,17 @@
 {
-   "name": "node-farm",
-   "version": "1.0.0",
-   "description": "Built with node.js",
-   "main": "index.js",
-   "scripts": {
-      "start": "nodemon index.js"
-   },
-   "repository": {
-      "type": "git",
-      "url": "git+https://github.com/ritiksharmarj/node-farm.git"
-   },
-   "author": "Ritik Sharma",
-   "license": "ISC",
-   "bugs": {
-      "url": "https://github.com/ritiksharmarj/node-farm/issues"
-   },
-   "homepage": "https://github.com/ritiksharmarj/node-farm#readme",
-   "dependencies": {
-      "slugify": "^1.6.5"
-   },
-   "devDependencies": {
-      "nodemon": "^2.0.21"
-   }
+  "name": "node-farm",
+  "version": "1.0.0",
+  "description": "Built with node.js",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Ritik Sharma",
+  "license": "ISC",
+  "dependencies": {
+    "slugify": "^1.6.5"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.21"
+  }
 }
